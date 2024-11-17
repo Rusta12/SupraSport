@@ -1,5 +1,5 @@
 # Используем официальный образ Superset
-FROM apache/superset:latest
+FROM apache/superset:4.0.2
 
 # Устанавливаем необходимые зависимости
 USER root
@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
 
 # Копируем файл конфигурации в контейнер
 COPY superset_config.py /app/pythonpath/
+COPY logo-test.png /app/superset/static/assets/images/
 
 # Переходим к пользователю superset
 USER superset

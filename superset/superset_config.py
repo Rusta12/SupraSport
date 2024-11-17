@@ -13,7 +13,6 @@ SECRET_KEY = SUPERSET_SECRET_KEY
 
 # Настройка подключения к базе данных Superset
 SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
-#SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
 # Другие настройки Superset могут быть добавлены здесь
 
@@ -39,6 +38,6 @@ FEATURE_FLAGS = {
 
 
 APP_NAME = "Тест Аналитика"
-#APP_ICON="/static/assets/images/logo.png"
-#LOGO_TARGET_PATH = '/' 
-#LOGO_TOOLTIP = "Аналитика Спорта"
+APP_ICON="/static/assets/images/logo-test.png"
+LOGO_TARGET_PATH = '/' 
+LOGO_TOOLTIP = "Аналитика_Спорта"
