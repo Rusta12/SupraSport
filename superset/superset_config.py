@@ -37,7 +37,9 @@ FEATURE_FLAGS = {
 }
 
 
-APP_NAME = "Тест Аналитика"
+APP_NAME = "Аналитика СУ"
 APP_ICON="/static/assets/images/logo-test.png"
+APP_ICON_WIDTH = 200
 LOGO_TARGET_PATH = '/' 
 LOGO_TOOLTIP = "Аналитика_Спорта"
+FAVICONS = [{"href": "/static/assets/images/elogo.png"}]

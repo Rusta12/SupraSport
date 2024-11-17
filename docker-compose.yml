@@ -15,9 +15,7 @@ services:
       - "5433:5432"
 
   superset:
-    build:
-      context: ./superset
-      dockerfile: Dockerfile  # Используем Dockerfile для Superset
+    build: ./superset
     container_name: suprasport_superset
     environment:
       SUPERSET_LOAD_EXAMPLES: "no"
@@ -38,30 +36,27 @@ services:
       - -c
       - |
         superset db upgrade &&
-        superset fab create-admin --username admin --firstname Admin --lastname User --email admin@admin.com --password admin &&
+        superset fab create-admin \
+            --username $ADMIN_USERNAME \
+            --firstname $ADMIN_FIRSTNAME \
+            --lastname $ADMIN_LASTNAME \
+            --email $ADMIN_EMAIL \
+            --password $ADMIN_PASSWORD &&
         superset init &&
         superset run --host 0.0.0.0 --port 8088
 
+  telegram_bot:
+    build: ./telegram_bot
+    container_name: suprasport_bot
+    environment:
+      TELEGRAM_TOKEN: "${TELEGRAM_TOKEN}"
+      DB_HOST: db
+      DB_NAME: "${DB_NAME}"
+      DB_USER: "${DB_USER}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+    depends_on:
+      - db
 
 volumes:
   postgres_data:
   superset_home:
-
-
-
- #   entrypoint:
- #     - /app/docker/docker-bootstrap.sh
- #   command:
- #     ["superset", "run"]
-#, "-p", "8088"
-  #telegram_bot:
-  #  build: ./telegram_bot
-  #  container_name: suprasport_bot
-  #  environment:
-  #    TELEGRAM_TOKEN: "${TELEGRAM_TOKEN}"
-  #    DB_HOST: db
-  #    DB_NAME: "${DB_NAME}"
-  #    DB_USER: "${DB_USER}"
-  #    DB_PASSWORD: "${DB_PASSWORD}"
-  #  depends_on:
-  #    - postgres

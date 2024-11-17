@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     libpq-dev 
     
 # Копируем файлы requirements.txt и bot.py в контейнер
-COPY telegram_bot/ /app/
+COPY ./ /app/
 
 # Устанавливаем зависимости
 RUN pip install --no-cache-dir -r requirements.txt
