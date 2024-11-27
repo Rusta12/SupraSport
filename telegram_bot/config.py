@@ -1,6 +1,10 @@
 import telebot
-import os
+import settings
 
-# Получаем токен бота из переменных окружения
-TOKEN = os.getenv("TELEGRAM_TOKEN")
-bot = telebot.TeleBot(TOKEN)
+
+bot = telebot.TeleBot(settings.TOKEN)
+
+openaiapi = settings.OPENAI
+
+catalog_ya = settings.CATALOG_ID
+ya_api = settings.Y_Api_Key
