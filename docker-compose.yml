@@ -82,8 +82,8 @@ services:
     ports:
       - "50223:50223"
     networks:
-      suprasport_net:
-        ipv4_address: 192.168.1.10
+     suprasport_net:
+       ipv4_address: 192.168.1.10
 
 volumes:
   postgres_data:

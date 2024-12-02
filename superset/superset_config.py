@@ -11,13 +11,6 @@ SUPERSET_SECRET_KEY = os.getenv('SUPERSET_SECRET_KEY')
 # Генерация безопасного SECRET_KEY
 SECRET_KEY = SUPERSET_SECRET_KEY
 
-ENABLE_PROXY_FIX = True
-PROXY_FIX_CONFIG = {"x_for": 1, "x_proto": 1, "x_host": 1, "x_port": 1, "x_prefix": 1}
-
-SUPERSET_WEBSERVER_PROTOCOL = "http"
-SUPERSET_WEBSERVER_ADDRESS = "0.0.0.0"
-SUPERSET_WEBSERVER_PORT = 8088
-
 
 # Настройка подключения к базе данных Superset
 SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
