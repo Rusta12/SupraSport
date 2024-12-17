@@ -38,11 +38,15 @@ def name_df(df, name_file: str):
 
 def astype_df(df):
     df['СС1'] = df['СС1'].replace(r" ", 0,  regex=True)
-    try:
-        df = df.astype({'НП3':int})
-        df = df.astype({'НП4':int})
-    except:
-        pass
+
+    columns_to_convert = ['Учреждение', 'Вид спорта', 'Общая численность',
+                         'НП1', 'НП2', 'НП3', 'НП4', 'НП', 
+                         'ТЭ1', 'ТЭ2','ТЭ3', 'ТЭ4', 'ТЭ5', 'ТЭ', 
+                         'СС1', 'СС2', 'СС3', 'СС', 
+                         'ВСМ', 'Гос работа']
+    df[columns_to_convert] = df[columns_to_convert].astype(int)
+
+
     df['НП пк'] = df['НП пк'].map(lambda x: round(x, 1))
     df['ТЭ пк'] = df['ТЭ пк'].map(lambda x: round(x, 1))
     df['СС пк'] = df['СС пк'].map(lambda x: round(x, 1))

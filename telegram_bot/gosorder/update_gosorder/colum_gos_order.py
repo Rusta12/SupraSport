@@ -12,10 +12,10 @@ col_gos = ['Учреждение', 'Вид спорта', 'Общая числе
                          'ВСМ', 'ВСМ пк', 
                          'Гос работа']
 
-col_bd = ('id_firm', 'id_sport', 'total_sport',
+col_bd = ['id_firm', 'id_sport', 'total_sport',
             'np1', 'np2', 'np3', 'np4', 'np', 'np_pk',
             'te1', 'te2', 'te3', 'te4', 'te5', 'te', 'te_pk',
             'cc1', 'cc2', 'cc3', 'cc', 'cc_pk', 
             'vcm', 'vcm_pk',
             'gos_work', 
-            'name_file')
+            'name_file']

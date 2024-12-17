@@ -7,11 +7,16 @@ def colum_name(df):
     #Убираем столбик с ФКиС
     if df.iloc[1,2] == 'ФКиС':
         df = df.drop(df.columns[[2]], axis=1)
+    elif df.iloc[2,2] == 'ФКиС':
+        df = df.drop(df.columns[[23,24,25]], axis=1)
+        df = df.drop(df.columns[[2]], axis=1)
     else:
         pass
     #Назначаем заголовки столбцов
     if df.shape[1] == 22:
         df.insert(5, 'НП4', 0)
+    else:
+        pass
     df = df.set_axis(col_drop, axis='columns')
     #Убираем лишние строки сверху
     if df.iloc[2,0] == 1:
