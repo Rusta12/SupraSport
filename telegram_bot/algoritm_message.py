@@ -11,6 +11,7 @@ from original_request.class_reg  import receiving_messages, SportClass
 from original_request.output_reg import output_inline
 from callback_allocation import mean_allocation
 from ekp.menu_mean_ekp import ekp_text
+from database.attributs import upd_loger_finishhim, add_loger
 
 
 
@@ -50,6 +51,7 @@ def algoritm_ai(message):
 
         elif df.shape[0] == 0:
             msg = bot.send_message(message.chat.id, '🚴‍♂️ Обрабатываю Ваш запрос ...')
+            add_loger(message, 'GPT', message.text)
             try:
                 theb_gpt(message)
                 bot.delete_message(message.chat.id, msg.message_id)
@@ -69,18 +71,9 @@ def theb_gpt(message):
         splitted_text = util.smart_split(output, chars_per_string=2000)
         for text in splitted_text:
             bot.send_message(message.chat.id, text=text, parse_mode='Markdown')
+            upd_loger_finishhim(message, 'GPT', message.text)
     else:
         bot.send_message(message.chat.id, "Не удалось получить ответ от GPT.")
+        upd_loger_finishhim(message, 'GPT', message.text, 'Не удалось получить ответ от GPT.')
     return
 
-"""
-def theb_gpt(message): 
-    output = ya_gpt(message.text)
-    if output:  # Проверяем, что output не пуст
-        splitted_text = util.smart_split(output, chars_per_string=2000)
-        for text in splitted_text:
-            bot.send_message(message.chat.id, text=text, parse_mode='Markdown')
-    else:
-        bot.send_message(message.chat.id, "Не удалось получить ответ от GPT.")
-    return
-"""

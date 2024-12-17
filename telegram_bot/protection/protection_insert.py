@@ -31,7 +31,7 @@ def add_user_bd(user_id: int, name: str, tg_name:str='None'):
 #вывод информации о пользователе в профиль
 def chek_user_profile(user_id: int):
 	column_names = ['id_role_access', 'id_user', 'username',
-	'email', 'phone', 'arhiv']
+	'email', 'phone', 'supralogin', 'suprapass', 'arhiv']
 	check_user_access = postgresql_to_dataframe(
 		"""
 		SELECT
@@ -40,6 +40,8 @@ def chek_user_profile(user_id: int):
 		username,
 		email,
 		phone,
+		supralogin,
+		suprapass,
 		arhiv
 		FROM supra.user_protection
 		WHERE id_user = %s
