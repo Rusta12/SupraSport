@@ -228,7 +228,7 @@ def school_mean_firm(school_id:int):
         ;"""%(school_id), column_names)
     return df
 
-def school_led_firm(school_id:id):
+def school_led_firm(school_id:int):
     column_names = ['name_job' , 'name_led', 'led_cotakt', 'led_mail']
     df = postgresql_to_dataframe(
         """
@@ -270,6 +270,32 @@ def sport_mean_fk5_r5(sport_id:int):
 
     return df
 
+def school_mean_fk5_r5(school_id:int):
+    column_names = ['total_sport', 'total_other', 'total_1r', 'total_kms', 
+    'total_ms', 'total_msmk', 'total_zms', 'total_grm']
+    df = postgresql_to_dataframe(
+        """
+        SELECT 
+        sum(total_sport) as total_sport,
+        sum(rank_r_other) as total_other,
+        sum(rank_r_1r) as total_1r,
+        sum(rank_r_kms) as total_kms,
+        sum(rank_z_ms) as total_ms,
+        sum(rank_z_msmk) as total_msmk,
+        sum(rank_z_zms) as total_zms,
+        sum(rank_z_grm) as total_grm
+        FROM supra.fk_order_r5 r5
+        where id_firm = %s
+        and archiv_data = '0'
+        and reporting_year = (
+        SELECT reporting_year 
+        FROM supra.fk_order_r5
+        where archiv_data = '0'
+        group by reporting_year order by reporting_year DESC LIMIT 1
+        )
+        ;"""%(school_id), column_names)
+
+    return df
 
 def sport_mean_fk5_r9(sport_id:int):
     column_names = ['trainers', 'ztr']
@@ -289,5 +315,26 @@ def sport_mean_fk5_r9(sport_id:int):
         group by reporting_year order by reporting_year DESC LIMIT 1
         )
         ;"""%(sport_id), column_names)
+    
+    return df
+
+def school_mean_fk5_r9(school_id:int):
+    column_names = ['trainers', 'ztr']
+    df = postgresql_to_dataframe(
+        """
+        SELECT 
+        sum(total_trainers) as trainers,
+        sum(rank_ztr) as ztr
+        FROM supra.fk_order_r9 
+        where id_firm = %s
+        and archiv_data = '0'
+        and reporting_year =
+        (
+        select reporting_year 
+        FROM supra.fk_order_r9
+        where archiv_data  = '0'
+        group by reporting_year order by reporting_year DESC LIMIT 1
+        )
+        ;"""%(school_id), column_names)
     
     return df
