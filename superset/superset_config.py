@@ -40,6 +40,17 @@ FEATURE_FLAGS = {
     "HORIZONTAL_FILTER_BAR": True,
 }
 
+
+D3_FORMAT = {
+    "decimal": ",",
+    "thousands": " ",
+    "grouping": [3],
+    "currency": ["", " руб."],
+    "date": "%d.%m.%Y",
+    "time": "%H:%M:%S",
+}
+
+
 #Без ограничения количества записей
 #SQLLAB_CTAS_NO_LIMIT = True
 

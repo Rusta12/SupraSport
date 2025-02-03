@@ -17,7 +17,7 @@ def fed_upload_file(message):
 		message.chat.id,
 		text='📌Перед отправкой файла убедитесь, пожалуйста, в следующем'
 	          '\n1. Файл должен быть в виде «excel».'
-	          '\n2. Предыдущие данные будут перемещены в архив.'
+	          '\n2. Файл должен содержать в себе только одну таблицу.'
 	          )
     #тут инструкция и сообщение о содержании файла
     bot.send_message(message.chat.id, text="Отправьте мне файл.")
@@ -32,10 +32,10 @@ def fed_upload_file(message):
                 new_file.write(downloaded_file)
             with open('./bot_documents/gif/batut.mp4', 'rb') as gif:
                 msv = bot.send_video(message.chat.id, gif, None)
-            id_fed = fed_to_id_tuple()
+            #id_fed = fed_to_id_tuple()
             df = load_fed_name(path_file)
             fed_add_to_bd(df)
-            arhiv_id_fed(id_fed)
+            #arhiv_id_fed(id_fed)
             bot.send_message(message.chat.id, f"Файл успешно обработан.")
             bot.delete_message(message.chat.id, msg.message_id)
             bot.delete_message(message.chat.id, msv.message_id)

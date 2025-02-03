@@ -124,6 +124,8 @@ def sport_mean_fed(sport_id:int):
         FROM supra.fed_order
         WHERE id_sport = %s
         AND archiv_data = '0'
+        ORDER BY created_at DESC
+        LIMIT 1;
         ;
         """%(sport_id), column_names)
     return df

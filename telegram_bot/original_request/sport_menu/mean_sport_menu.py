@@ -15,37 +15,49 @@ from original_request.sport_menu.kpi_sport_menu import get_sport_kpi
 
 
 def sport_federation_contex(df, name_sport:str):
-    if df.shape[0] != 0:
-        fed_name = df.loc[0, 'name_fed']
-        name_job = df.loc[0, 'leader_job']
-        fio_name = df.loc[0, 'leader_name']
-        fio_contact = df.loc[0, 'leader_contact']
-        name_rp = df.loc[0, 'fed_rd']
-        name_data = df.loc[0, 'fed_date_rd']
-        name_data = name_data.strftime('%d.%m.%Y')
-        name_period = df.loc[0, 'fed_date_text']
-        name_finish = df.loc[0, 'fed_date_finesh']
-        name_finish = name_finish.strftime('%d.%m.%Y')
-        contakt_email = df.loc[0, 'fed_email']
-        contakt_url = df.loc[0, 'fed_website']
-        contakt_tel = df.loc[0, 'fed_contact']
-        ogrn = df.loc[0, 'id_ogrn']
-        FdName = f'На территории города Москвы развитием и популяризацией вида спорта {name_sport.lower()} ' \
-                f'занимается {fed_name} (далее – Федерация). \n<b>{name_job} – {fio_name}.</b>\n'\
-                f'<b>Контактный телефон руководителя:</b> {fio_contact}\n'
-        DataFd = f'На основании распоряжения о государственной аккредитации ' \
-                f'региональных спортивных федераций № {name_rp} от {name_data} г. ' \
-                f'Федерация аккредитована сроком на {name_period}. Срок действия аккредитации ' \
-                f'Федерации до {name_finish} г.\n\n'
-        ConFd = f"<b>Почта:</b> {contakt_email}\n"\
-                f"<b>Сайт:</b> {contakt_url}\n"\
-                f"{contakt_tel}\n"
-        ogrn_f = f"ОГРН: {ogrn}\n\n"
-        context = FdName+DataFd+ConFd+ogrn_f
-        return context
-    else:
-        context = f'На территории города Москвы отсуствует аккредитованая федерация по виду спорта {name_sport.lower()}\n\n'
-        return context
+	today = datetime.today().date()
+	if df.shape[0] != 0:
+		fed_name = df.loc[0, 'name_fed']
+		name_job = df.loc[0, 'leader_job']
+		fio_name = df.loc[0, 'leader_name']
+		fio_contact = df.loc[0, 'leader_contact']
+		name_rp = df.loc[0, 'fed_rd']
+		name_data = df.loc[0, 'fed_date_rd']
+		name_data_str = name_data.strftime('%d.%m.%Y')
+		name_period = df.loc[0, 'fed_date_text']
+		name_finish = df.loc[0, 'fed_date_finesh']
+		name_finish_str = name_finish.strftime('%d.%m.%Y')
+		contakt_email = df.loc[0, 'fed_email']
+		contakt_url = df.loc[0, 'fed_website']
+		contakt_tel = df.loc[0, 'fed_contact']
+		ogrn = df.loc[0, 'id_ogrn']
+		if name_finish > today:
+			FdName = f'На территории города Москвы развитием и популяризацией вида спорта {name_sport.lower()} ' \
+					f'занимается {fed_name} (далее – Федерация). \n<b>{name_job} – {fio_name}.</b>\n'\
+					f'<b>Контактный телефон руководителя:</b> {fio_contact}\n'
+			DataFd = f'На основании распоряжения о государственной аккредитации ' \
+					f'региональных спортивных федераций № {name_rp} от {name_data_str} г. ' \
+					f'Федерация аккредитована сроком на {name_period}. Срок действия аккредитации ' \
+					f'Федерации до {name_finish_str} г.\n\n'
+			ConFd = f"<b>Почта:</b> {contakt_email}\n"\
+					f"<b>Сайт:</b> {contakt_url}\n"\
+					f"{contakt_tel}\n"
+			ogrn_f = f"ОГРН: {ogrn}\n\n"
+			context = FdName+DataFd+ConFd+ogrn_f
+			return context
+		else:
+			FdName = f'Внимание ⚠️ закончилась аккредитация у Федерации ({fed_name}) аккредитация была до {name_finish_str} г.❌\n'
+			DataFd = f'На основании распоряжения о государственной аккредитации ' \
+					f'региональных спортивных федераций № {name_rp} от {name_data_str} г. \n\n'
+			ConFd = f"<b>Почта:</b> {contakt_email}\n"\
+					f"<b>Сайт:</b> {contakt_url}\n"\
+					f"{contakt_tel}\n"
+			ogrn_f = f"ОГРН: {ogrn}\n\n"
+			context = FdName+DataFd+ConFd+ogrn_f
+			return context
+	else:
+		context = f'На территории города Москвы отсуствует аккредитованая федерация по виду спорта {name_sport.lower()}\n\n'
+		return context
 
 def sport_contex_count(name_sport:str, df_school):
 	if df_school.shape[0] > 1:
@@ -180,11 +192,11 @@ def sport_fk_r9(df):
 		ztr = df.loc[0, 'ztr']
 		#Общие
 		if trainers == 1:
-			trainers = f'\n\nРаботу с занимающимися проводит <b>один тренер-преподаватель</b> '
+			trainers = f'\n\nРаботу с обучающимися проводит <b>один тренер-преподаватель</b> '
 		elif trainers > 1 and trainers < 5:
-			trainers = f'\n\nРаботу с занимающимися проводят <b>{trainers} тренера-преподавателя</b> '
+			trainers = f'\n\nРаботу с обучающимися проводят <b>{trainers} тренера-преподавателя</b> '
 		elif trainers > 4:
-			trainers = f'\n\nРаботу с занимающимися проводят <b>{trainers} тренеров-преподавателей</b> '
+			trainers = f'\n\nРаботу с обучающимися проводят <b>{trainers} тренеров-преподавателей</b> '
 		if ztr == 1:
 			ztr = f'(из них <b>один тренер-преподаватель</b> имеет почетное звание «Заслуженный тренер России»).'
 		elif ztr == 2:
