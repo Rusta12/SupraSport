@@ -10,7 +10,7 @@ from protection.check_prot import validation_user
 from original_request.class_reg  import receiving_messages, SportClass
 from original_request.output_reg import output_inline
 from callback_allocation import mean_allocation
-from ekp.menu_mean_ekp import ekp_text
+from ekp.menu_mean_ekp import ekp_text, ias_text
 from database.attributs import upd_loger_finishhim, add_loger
 
 
@@ -31,6 +31,9 @@ def algoritm_ai(message):
     elif message.text.lower() == 'екп':
         bot.delete_message(message.chat.id, message.message_id)
         return ekp_text(message)
+    elif message.text.lower() == 'иас':
+        bot.delete_message(message.chat.id, message.message_id)
+        return ias_text(message)
     else:
         df =  receiving_messages(message.text)
         if df.shape[0] != 0:

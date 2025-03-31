@@ -206,6 +206,7 @@ def school_mean_curator(school_id:int):
         SELECT name_curator,contakt_tel,contakt_email
         FROM supra.dict_curator_firm dcf 
         where id_firm = %s
+        AND archiv_curator = '0'
         ;"""%(school_id), column_names)
     return df
 
