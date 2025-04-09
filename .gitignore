@@ -4,6 +4,7 @@ __pycache__/
 *.sql
 *.crt
 *.key
+*.html
 
 # Jupyter notebook checkpoints
 .ipynb_checkpoints/

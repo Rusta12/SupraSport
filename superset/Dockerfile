@@ -16,6 +16,7 @@ RUN pip install gunicorn gevent
 COPY superset_config.py /app/pythonpath/
 COPY logo-test.png /app/superset/static/assets/images/
 COPY elogo.png /app/superset/static/assets/images/
+COPY custom_html/gz_table.html /app/superset/static/custom_html/
 
 # Переходим к пользователю superset
 USER superset

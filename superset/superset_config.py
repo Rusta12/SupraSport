@@ -38,6 +38,7 @@ FEATURE_FLAGS = {
     "ESCAPE_MARKDOWN_HTML": True,
     #"THUMBNAILS": True,
     "HORIZONTAL_FILTER_BAR": True,
+    "MARKDOWN_HTML_SANITIZE": False,
 }
 
 
