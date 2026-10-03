@@ -9,7 +9,7 @@ import pandas as pd
 #CAACAgIAAxkBAAEIZQ5kJrjRmisxkyIT5gKjzmCr6-xkigACFwADajzGERemoBXXfe-4LwQ
 
 from original_request.reference_reg import sport_mean_school, sport_name_sport, sport_mean_fed, sport_mean_school_past
-from original_request.reference_reg import sport_mean_fk5_r5, sport_mean_fk5_r9
+from original_request.reference_reg import sport_rank_statistics, sport_mean_fk5_r9
 from database.attributs import upd_loger_finishhim, add_loger
 from original_request.sport_menu.kpi_sport_menu import get_sport_kpi
 
@@ -131,7 +131,7 @@ def sport_contex_sum(df_school):
 	contex = SumAll+SumNp+SumTe+SumSs+SumVsm+SumGs
 	return contex
 
-def sport_fk_r5(df):
+def sport_rank_stat(df):
 	if df.loc[0,'total_sport'] != None:
 		Total = df.loc[0, 'total_sport']
 		Other = df.loc[0, 'total_other']
@@ -142,8 +142,11 @@ def sport_fk_r5(df):
 		zms = df.loc[0, 'total_zms']
 		grm = df.loc[0, 'total_grm']
 		#добавление текста
-		Total = '{:,}'.format(Total).replace(',', ' ')
-		Total = f'\n\nСпортивные разряды имеют <b>{Total} чел.,</b> из них:'
+		if Total != 0:
+			Total = '{:,}'.format(Total).replace(',', ' ')
+			Total = f'\n\nСпортивные разряды имеют <b>{Total} чел.,</b> из них:'
+		else:
+			Total = ''
 		#Общие
 		if Other != 0:
 			Other = '{:,}'.format(Other).replace(',', ' ')
@@ -227,7 +230,7 @@ def sport_mean_reg(sport_id:int):
 	name_sport = sport_name_sport(sport_id)
 	df_school = sport_mean_school(sport_id)
 	df_fed = sport_mean_fed(sport_id)
-	df_fk5_r5 = sport_mean_fk5_r5(sport_id)
+	df_sport_rank = sport_rank_statistics(sport_id)
 	df_fk5_r9 = sport_mean_fk5_r9(sport_id)
 	#Загаловок
 	context_header = f"Информационная справка по виду спорта <b>{name_sport.lower()}</b>\n\n"\
@@ -238,7 +241,7 @@ def sport_mean_reg(sport_id:int):
 	#Суммы по занимающимся
 	context_sh_sum = sport_contex_sum(df_school)
 	#Стат отчет 5-ФК
-	context_fk_5_sum = sport_fk_r5(df_fk5_r5)
+	context_sport_rank = sport_rank_stat(df_sport_rank)
 	context_fk_9_sum = sport_fk_r9(df_fk5_r9)
 	#Сборники
 	#contexе_team_sum = sport_team_context(sport_id)
@@ -250,7 +253,7 @@ def sport_mean_reg(sport_id:int):
 		context_federation+
 		context_sh_count+
 		context_sh_sum+
-		context_fk_5_sum+
+		context_sport_rank+
 		context_fk_9_sum
 		)
 
@@ -279,7 +282,7 @@ def print_sport(message, sport_menu:str):
 	try:
 		context_school_sport = sport_mean_reg(sport_id)
 		bot.send_message(message.chat.id, context_school_sport, parse_mode='HTML')
-		mean_sport_kpi(message, sport_id)
+		#mean_sport_kpi(message, sport_id)
 		bot.delete_message(message.chat.id, msg.message_id)
 		upd_loger_finishhim(message, 'sport_menu', sport_id)
 		return

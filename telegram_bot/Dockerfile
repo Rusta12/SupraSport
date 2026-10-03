@@ -15,12 +15,6 @@ COPY ./ /app/
 # Устанавливаем зависимости
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Устанавливаем переменные окружения
-#ENV TELEGRAM_TOKEN=""
-#ENV DB_HOST="db"
-#ENV DB_NAME=""
-#ENV DB_USER=""
-#ENV DB_PASSWORD=""
 
 # Запуск бота
 CMD ["python", "bot.py"]

@@ -92,7 +92,7 @@ def sport_mean_school_past(sport_id:int):
                 WHERE archiv_data = '0'
                 GROUP BY created_at
                 ORDER BY created_at DESC
-                LIMIT 12
+                LIMIT 8
             ) AS subquery
             ORDER BY created_at ASC
             LIMIT 1
@@ -126,7 +126,6 @@ def sport_mean_fed(sport_id:int):
         AND archiv_data = '0'
         ORDER BY created_at DESC
         LIMIT 1;
-        ;
         """%(sport_id), column_names)
     return df
 
@@ -244,55 +243,51 @@ def school_led_firm(school_id:int):
         ;"""%(school_id), column_names)
     return df
 
-def sport_mean_fk5_r5(sport_id:int):
+def sport_rank_statistics(sport_id:int):
     column_names = ['total_sport', 'total_other', 'total_1r', 'total_kms', 
     'total_ms', 'total_msmk', 'total_zms', 'total_grm']
     df = postgresql_to_dataframe(
         """
         SELECT 
-        sum(total_sport) as total_sport,
-        sum(rank_r_other) as total_other,
-        sum(rank_r_1r) as total_1r,
-        sum(rank_r_kms) as total_kms,
-        sum(rank_z_ms) as total_ms,
-        sum(rank_z_msmk) as total_msmk,
-        sum(rank_z_zms) as total_zms,
-        sum(rank_z_grm) as total_grm
-        FROM supra.fk_order_r5 r5
-        where id_sport = %s
-        and archiv_data = '0'
-        and reporting_year = (
-        SELECT reporting_year 
-        FROM supra.fk_order_r5
-        where archiv_data = '0'
-        group by reporting_year order by reporting_year DESC LIMIT 1
+            COUNT(*) AS total_sport,
+            COUNT(CASE WHEN id_razryad IN (24,25,26,27,28) THEN 1 END) AS total_other,
+            COUNT(CASE WHEN id_razryad IN (115) THEN 1 END) AS total_1r,
+            COUNT(CASE WHEN id_razryad IN (30) THEN 1 END) AS total_kms,
+            COUNT(CASE WHEN id_razryad IN (31) THEN 1 END) AS total_ms,
+            COUNT(CASE WHEN id_razryad IN (32) THEN 1 END) AS total_msmk,
+            COUNT(CASE WHEN id_razryad IN (129) THEN 1 END) AS total_zms,
+            COUNT(CASE WHEN id_razryad IN (135) THEN 1 END) AS total_grm
+        FROM supra.sports_rank_statistics srs
+        WHERE id_sport = %s
+        AND created_at = (
+        SELECT created_at  FROM supra.sports_rank_statistics
+        WHERE archiv_qualification = '0'
+        GROUP BY created_at  ORDER BY created_at DESC LIMIT 1
         )
         ;"""%(sport_id), column_names)
 
     return df
 
-def school_mean_fk5_r5(school_id:int):
+def school_rank_statistics(school_id:int):
     column_names = ['total_sport', 'total_other', 'total_1r', 'total_kms', 
     'total_ms', 'total_msmk', 'total_zms', 'total_grm']
     df = postgresql_to_dataframe(
         """
         SELECT 
-        sum(total_sport) as total_sport,
-        sum(rank_r_other) as total_other,
-        sum(rank_r_1r) as total_1r,
-        sum(rank_r_kms) as total_kms,
-        sum(rank_z_ms) as total_ms,
-        sum(rank_z_msmk) as total_msmk,
-        sum(rank_z_zms) as total_zms,
-        sum(rank_z_grm) as total_grm
-        FROM supra.fk_order_r5 r5
-        where id_firm = %s
-        and archiv_data = '0'
-        and reporting_year = (
-        SELECT reporting_year 
-        FROM supra.fk_order_r5
-        where archiv_data = '0'
-        group by reporting_year order by reporting_year DESC LIMIT 1
+            COUNT(*) AS total_sport,
+            COUNT(CASE WHEN id_razryad IN (24,25,26,27,28) THEN 1 END) AS total_other,
+            COUNT(CASE WHEN id_razryad IN (115) THEN 1 END) AS total_1r,
+            COUNT(CASE WHEN id_razryad IN (30) THEN 1 END) AS total_kms,
+            COUNT(CASE WHEN id_razryad IN (31) THEN 1 END) AS total_ms,
+            COUNT(CASE WHEN id_razryad IN (32) THEN 1 END) AS total_msmk,
+            COUNT(CASE WHEN id_razryad IN (129) THEN 1 END) AS total_zms,
+            COUNT(CASE WHEN id_razryad IN (135) THEN 1 END) AS total_grm
+        FROM supra.sports_rank_statistics srs
+        WHERE id_firm = %s
+        AND created_at = (
+        SELECT created_at  FROM supra.sports_rank_statistics
+        WHERE archiv_qualification = '0'
+        GROUP BY created_at  ORDER BY created_at DESC LIMIT 1
         )
         ;"""%(school_id), column_names)
 

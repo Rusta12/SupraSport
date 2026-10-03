@@ -12,7 +12,7 @@ from original_request.output_reg import output_inline
 from callback_allocation import mean_allocation
 from ekp.menu_mean_ekp import ekp_text, ias_text
 from database.attributs import upd_loger_finishhim, add_loger
-
+from normalize_values.main import process_text
 
 
 
@@ -22,18 +22,21 @@ def algoritm_ai(message):
     else:
         return
 
-    if message.text == 'ГОС задание' or message.text.lower() == 'гос' or message.text.lower() == 'задание' or message.text.lower() == 'гз ':
-        bot.delete_message(message.chat.id, message.message_id)
+    if message.text.lower() in ['гос задание', 'гос', 'задание', 'гз ']:
+        #bot.delete_message(message.chat.id, message.message_id)
         return gos_menu_general(message)
-    elif message.text.lower() == 'фед' or message.text.lower() == 'федерации' or message.text.lower() == 'федера':
-        bot.delete_message(message.chat.id, message.message_id)
+    elif message.text.lower() in ['фед', 'федерации', 'федера']:
+        #bot.delete_message(message.chat.id, message.message_id)
         return fed_menu_general(message)
     elif message.text.lower() == 'екп':
-        bot.delete_message(message.chat.id, message.message_id)
+        #bot.delete_message(message.chat.id, message.message_id)
         return ekp_text(message)
     elif message.text.lower() == 'иас':
-        bot.delete_message(message.chat.id, message.message_id)
+        #bot.delete_message(message.chat.id, message.message_id)
         return ias_text(message)
+    elif message.text.lower() in ['емир', 'минспорт', 'гис', 'фгис', 'министерство']:
+        #bot.delete_message(message.chat.id, message.message_id)
+        return process_text(message)
     else:
         df =  receiving_messages(message.text)
         if df.shape[0] != 0:
@@ -44,11 +47,11 @@ def algoritm_ai(message):
             elif df.shape[0] > 15:
                 bot.send_message(message.chat.id, 
                     'Ваш запрос содержит большое количество вариантов, пожалуйста дайте мне оптимальный контекст.')
-                bot.delete_message(message.chat.id, message.message_id)
+                #bot.delete_message(message.chat.id, message.message_id)
                 return
 
             else:
-                bot.delete_message(message.chat.id, message.message_id)
+                #bot.delete_message(message.chat.id, message.message_id)
                 input_class = SportClass(id_user = message.chat.id, df = df, text_user = message.text)
                 return output_inline(message, input_class)
 
@@ -57,11 +60,11 @@ def algoritm_ai(message):
             add_loger(message, 'GPT', message.text)
             try:
                 theb_gpt(message)
-                bot.delete_message(message.chat.id, msg.message_id)
+                #bot.delete_message(message.chat.id, msg.message_id)
                 return
             except Exception as e:
                 bot.send_message(message.chat.id, f"Сервер занят. Попробуйте позже. \nКод ошибки:\n{e}")
-                bot.delete_message(message.chat.id, msg.message_id)
+                #bot.delete_message(message.chat.id, msg.message_id)
                 return
 
 def split_text(text, max_length=4096):

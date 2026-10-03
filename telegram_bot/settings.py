@@ -13,3 +13,8 @@ CATALOG_ID = os.getenv('CATALOG_ID')
 Y_Api_Key = os.getenv('Y_Api_Key')
 
 
+# Настройки MTPROTO прокси
+PROXY_TYPE = 'socks5'  # или 'socks5h' (если нужно резолвить домены через прокси)
+PROXY_ADDR = "141.98.189.185"  # IP прокси сервера
+PROXY_PORT = 443  # Порт (обычно 1080, 443 или 80)
+PROXY_SECRET = "ee1c677bc896a228c1e4d31b536ab8199b706574726f766963682e7275"  # Secret от MTPROTO

@@ -10,6 +10,9 @@ def colum_name(df):
     elif df.iloc[2,2] == 'ФКиС':
         df = df.drop(df.columns[[23,24,25]], axis=1)
         df = df.drop(df.columns[[2]], axis=1)
+    # Временное решение затем убрать когда реши добавить УТЭ6
+    elif df.iloc[1,13] == '6 год':
+        df = df.drop(df.columns[[13]], axis=1)
     else:
         pass
     #Назначаем заголовки столбцов

@@ -9,5 +9,9 @@ __pycache__/
 # Jupyter notebook checkpoints
 .ipynb_checkpoints/
 
+# tdm
+tdm_bot/*.whl
+
+
 # Лог-файлы
 *.log

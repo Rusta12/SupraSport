@@ -4,7 +4,7 @@ import os
 import pandas as pd
 #Mod
 from original_request.reference_reg import school_name_school, school_mean_sport, school_mean_curator, school_mean_sport_past
-from original_request.reference_reg import school_mean_fk5_r5, school_mean_fk5_r9
+from original_request.reference_reg import school_rank_statistics, school_mean_fk5_r9
 from original_request.reference_reg import school_mean_firm, school_led_firm
 from database.attributs import upd_loger_finishhim, add_loger
 from original_request.school_menu.kpi_school_menu import get_school_kpi
@@ -147,7 +147,7 @@ def school_mean_reg(school_menu:int):
     #Загрузска данных
     name_school = school_name_school(school_menu)
     df_school = school_mean_sport(school_menu)
-    df_fk5_r5 = school_mean_fk5_r5(school_menu)
+    df_school_rank= school_rank_statistics(school_menu)
     df_fk5_r9 = school_mean_fk5_r9(school_menu)
     #Загаловок
     context_header = f"Информационная справка по учреждению: \n<b>{name_school}</b>\n\n"
@@ -160,7 +160,7 @@ def school_mean_reg(school_menu:int):
     #Виды спорта
     context_sh_count = school_contex_count(name_school, df_school)
     # Стат отчет 5-ФК Разряды Тренеры
-    context_fk_5_sum = school_fk_r5(df_fk5_r5)
+    context_school_rank_sum = school_fk_r5(df_school_rank)
     context_fk_9_sum = school_fk_r9(df_fk5_r9)
     #Объеденение
     context = (
@@ -169,7 +169,7 @@ def school_mean_reg(school_menu:int):
             context_led+
             context_curator+
             context_sh_count+
-            context_fk_5_sum+
+            context_school_rank_sum+
             context_fk_9_sum
             )
     return context
@@ -195,7 +195,7 @@ def print_school(message, sport_menu:str):
     try:
         context_school_sport = school_mean_reg(school_menu)
         bot.send_message(message.chat.id, context_school_sport, parse_mode='HTML')
-        mean_school_kpi(message, school_menu)
+        #mean_school_kpi(message, school_menu)
         bot.delete_message(message.chat.id, msg.message_id)
         upd_loger_finishhim(message, 'sсhool_menu', school_menu)
         return

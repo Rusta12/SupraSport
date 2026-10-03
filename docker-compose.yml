@@ -11,10 +11,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d
     ports:
-      - "5433:5433"
+      - "5433:5432"
     networks:
       suprasport_net:
         ipv4_address: 192.168.1.30
+    restart: unless-stopped
 
   superset:
     build: ./superset
@@ -54,23 +55,47 @@ services:
     networks:
       suprasport_net:
         ipv4_address: 192.168.1.20
+    restart: unless-stopped
 
-  telegram_bot:
-    build: ./telegram_bot
-    container_name: suprasport_bot
+#  telegram_bot:
+#    build: ./telegram_bot
+#    container_name: suprasport_bot
+#    environment:
+#      TELEGRAM_TOKEN: "${TELEGRAM_TOKEN}"
+#      DB_HOST: "${DB_HOST}"
+#      DB_NAME: "${DB_NAME}"
+#      DB_USER: "${DB_USER}"
+#      DB_PASSWORD: "${DB_PASSWORD}"
+#      Y_Api_Key: "${Y_Api_Key}"
+#      CATALOG_ID: "${CATALOG_ID}"
+#    depends_on:
+#      - db
+#    networks:
+#      suprasport_net:
+#        ipv4_address: 192.168.1.40
+#    restart: unless-stopped
+
+  tdm_bot:
+    build:
+      context: .
+      dockerfile: ./tdm_bot/Dockerfile
+    container_name: suprasport_messenger_bot
     environment:
-      TELEGRAM_TOKEN: "${TELEGRAM_TOKEN}"
+      MESSENGER_TOKEN: "${MESSENGER_TOKEN}"
+      MESSENGER_REST: "${MESSENGER_REST}"
+      MESSENGER_SSE: "${MESSENGER_SSE}"
+      MESSENGER_FILE: "${MESSENGER_FILE}"
       DB_HOST: "${DB_HOST}"
       DB_NAME: "${DB_NAME}"
       DB_USER: "${DB_USER}"
       DB_PASSWORD: "${DB_PASSWORD}"
-      Y_Api_Key: "${Y_Api_Key}"
-      CATALOG_ID: "${CATALOG_ID}"
     depends_on:
       - db
     networks:
       suprasport_net:
         ipv4_address: 192.168.1.40
+    restart: unless-stopped
+
 
   nginx:
     image: nginx:1.27.3
@@ -89,6 +114,7 @@ services:
     networks:
      suprasport_net:
        ipv4_address: 192.168.1.10
+    restart: unless-stopped
 
 volumes:
   postgres_data:

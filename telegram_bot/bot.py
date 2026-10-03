@@ -8,7 +8,10 @@ from protection.registration_user import add_user, profile_user
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    bot.delete_message(message.chat.id, message.message_id)
+    try:
+        bot.delete_message(message.chat.id, message.message_id)
+    except:
+        pass
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     photo = open('./bot_documents/logo.jpg', 'rb')
     f = open('./bot_documents/Text_bot_information.txt', 'rt')
@@ -34,7 +37,10 @@ def start_message(message):
   
 @bot.message_handler(commands=['profile'])
 def profile_message(message):
-    bot.delete_message(message.chat.id, message.message_id)
+    try:
+        bot.delete_message(message.chat.id, message.message_id)
+    except:
+        pass
     profile_user(message)
 
 
