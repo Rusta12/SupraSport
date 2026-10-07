@@ -80,7 +80,12 @@ services:
       context: .
       dockerfile: ./tdm_bot/Dockerfile
     container_name: suprasport_messenger_bot
+    volumes:
+      # Видео для утренней рассылки: можно накидывать файлы в ./tdm_bot/bot_documents/video
+      # на хосте — пересобирать образ не нужно. Read-only: бот только читает.
+      - ./tdm_bot/bot_documents/video:/app/bot_documents/video:ro
     environment:
+      TZ: "${TZ:-Europe/Moscow}"
       MESSENGER_TOKEN: "${MESSENGER_TOKEN}"
       MESSENGER_REST: "${MESSENGER_REST}"
       MESSENGER_SSE: "${MESSENGER_SSE}"

@@ -1,6 +1,8 @@
 from messenger_bot_api import MessageBotEvent, MessageRequest, InlineMessageButton
 # Модули
-from handlers.messages import SportClass
+# SportClass живёт в handlers.data_classs, а не в handlers.messages —
+# прежний импорт отсюда падал бы с ImportError
+from handlers.data_classs import SportClass
 
 
 def output_inline_sport(event: MessageBotEvent, input_class: SportClass):

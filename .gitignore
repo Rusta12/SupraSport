@@ -15,3 +15,5 @@ tdm_bot/*.whl
 
 # Лог-файлы
 *.log
+.agents
+.vscode

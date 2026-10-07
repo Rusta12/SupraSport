@@ -6,6 +6,40 @@ from database.select_sport import sport_mean_school, sport_name_sport, sport_mea
 from database.select_sport import sport_rank_statistics, sport_stat_trainer
 
 
+# Русские названия месяцев в родительном падеже — для дат вида «10 октября 2024»
+_MONTHS_RU_GENITIVE = {
+    1: 'января', 2: 'февраля', 3: 'марта', 4: 'апреля',
+    5: 'мая', 6: 'июня', 7: 'июля', 8: 'августа',
+    9: 'сентября', 10: 'октября', 11: 'ноября', 12: 'декабря',
+}
+
+
+def format_date_ru(value) -> str:
+    """Дата словами: «10 октября 2024» вместо «10.10.2024».
+
+    День без ведущего нуля (9, а не 09). None → пустая строка: часть
+    дат в справочнике может отсутствовать, и падать из-за этого нельзя.
+    """
+    if value is None:
+        return ''
+    day = int(getattr(value, 'day', 0) or 0)
+    month = int(getattr(value, 'month', 0) or 0)
+    if not day or month not in _MONTHS_RU_GENITIVE:
+        return str(value)  # не-дата — возвращаем как есть
+    return '{} {} {}'.format(day, _MONTHS_RU_GENITIVE[month], value.year)
+
+
+def gs_phrase(gs_orgs: int, gs_total: int) -> str:
+    """Формулировка строки о спортсменах, трудоустроенных в учреждении(-ях).
+
+    :param gs_orgs: сколько учреждений имеют трудоустроенных (>1 → множественное).
+    :param gs_total: суммарное число трудоустроенных (0 → строка не выводится).
+    """
+    if gs_total == 0:
+        return ''
+    place = 'в учреждениях' if gs_orgs > 1 else 'в учреждении'
+    return f'– спортсмены, трудоустроенные {place} – [b]{gs_total} чел.[/b]'
+
 
 def sport_federation_contex(df, name_sport:str):
 	today = datetime.today().date()
@@ -16,10 +50,10 @@ def sport_federation_contex(df, name_sport:str):
 		fio_contact = df.loc[0, 'leader_contact']
 		name_rp = df.loc[0, 'fed_rd']
 		name_data = df.loc[0, 'fed_date_rd']
-		name_data_str = name_data.strftime('%d.%m.%Y')
+		name_data_str = format_date_ru(name_data)
 		name_period = df.loc[0, 'fed_date_text']
 		name_finish = df.loc[0, 'fed_date_finesh']
-		name_finish_str = name_finish.strftime('%d.%m.%Y')
+		name_finish_str = format_date_ru(name_finish)
 		contakt_email = df.loc[0, 'fed_email']
 		contakt_url = df.loc[0, 'fed_website']
 		contakt_tel = df.loc[0, 'fed_contact']
@@ -86,6 +120,10 @@ def sport_contex_sum(df_school):
 		SumSs = df_school['СС'].sum()
 		SumVsm = df_school['ВСМ'].sum()
 		SumGs = df_school['Гос работа'].sum()
+		# Сколько УЧРЕЖДЕНИЙ реально имеют трудоустроенных спортсменов — от этого
+		# зависит падеж формулировки: несколько → «в учреждениях», одно → «в учреждении».
+		# NaN (нет данных) в подсчёте не участвует.
+		gs_orgs = int((df_school['Гос работа'].fillna(0) > 0).sum())
 		if df_school.shape[0] > 1:
 			SumAll = '{:,}'.format(SumAll).replace(',', ' ')
 			SumAll = f'\n\nВ указанных учреждениях занимаются [b]{SumAll} чел.[/b], из них:'
@@ -111,7 +149,7 @@ def sport_contex_sum(df_school):
 		else:
 			SumVsm = ''
 		if SumGs != 0:
-			SumGs = f'– спортсмены, трудоустроенные в учреждении – [b]{SumGs} чел.[/b]'
+			SumGs = gs_phrase(gs_orgs, SumGs)
 		else:
 			SumGs = ''
 	else:
